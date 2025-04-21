@@ -1,0 +1,65 @@
+{% include "includes/feedback.html" %}                     
+
+
+<div class="bg-white p-10 rounded-2xl shadow">
+
+    <a href="{% url "add-member" %}" class="btn  inline-block">
+        <div class=" flex items-center gap-2">
+            <span>New Member</span>
+            <i class="fa fa-plus"></i>
+        </div>
+    </a>
+
+    <div class="overflow-x-auto text-nowrap">
+        <table class="table-auto w-full mt-10">
+            <thead>
+                <tr class='text-left border-b border-zinc-200'>
+                    <th class="p-4">SN</th>
+                    <th class="p-4">Name</th>
+                    <th class="p-4">ID no.</th>
+                    <th class="p-4">Email</th>
+                    <th class="p-4">Phone</th>
+                    <th class="p-4">Department</th>
+                    <th class="p-4">Status</th>
+                    <th class="p-4">Action</th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                {% for member in members %}
+                    <tr class="border-b border-zinc-200 hover:bg-zinc-50/50 cursor-pointer" onclick="window.location.href='{% url 'profile' 'members' member.id %}'">
+                        <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <span>{{forloop.counter}}</span>
+                                {% if member.new %}
+                                    <span class="h-2 w-2 bg-green-400 rounded-full"></span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="p-4">{{member.title}} {{member.get_full_name}}</td>
+                        <td class="p-4">{{ member.username}} </td>
+                        <td class="p-4"> {{member.email}} </td>
+                        <td class="p-4"> {{member.phone}} </td>
+                        <td class="p-4"> {{member.department.name}} </td>
+                        <td class="p-4"> {% if member.is_active %} <span class="text-green-400 font-medium fa fa-check"></span>{% else %} <span class="text-red-400 font-medium fa fa-times"></span> {% endif %}</td>
+                        <td>
+                     
+            
+                            {% if member.is_active %}
+                                <a href="{% url "account-activation" member.id %}" class="py-3 px-4 rounded border border-red-400 text-red-500 hover:bg-red-100">Deactivate</a>
+                            {% else %}
+                                <a href="{% url "account-activation" member.id %}" class="py-3 px-4 rounded border border-green-400 text-green-500 hover:bg-green-100">Activate</a>
+                            {% endif %}
+                        
+                    
+                        </td>
+                    </tr>
+                
+                {% empty %}
+                <tr ><td colspan="4" class="p-4">No member yet!</td></tr>
+                
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

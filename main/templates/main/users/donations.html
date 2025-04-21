@@ -1,0 +1,99 @@
+<div class="bg-white p-10 rounded-2xl shadow">
+
+    {% if form %}
+
+        <div class="flex gap-5 items-center justify-between">
+
+        <a href="{% url "donations" %}" class="bg-zinc-400 px-3 py-2 rounded  font-medium cursor-pointer text-white flex items-center gap-2">
+            <i class="fa fa-arrow-backward"></i>
+            <span>Back</span>
+        </a>
+
+        </div>
+
+        <form method="post" class="mt-10 container">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mt-4">
+                <div for="">{{field.label}}</div>
+                {{field}}
+                <small class="text-primary-400">{{field.errors}}</small>
+            </div>
+            {% endfor %}                        
+            <button type="submit" class="p-4 mt-10 text-center btn text-white transition cursor-pointer w-[15rem] rounded">
+                <span>Donate</span>
+                <i class="fa fa-donate"></i>
+            </button>
+
+        </form>
+
+    {% else %}
+
+        <div class="flex gap-5 items-center justify-between">
+        
+            <a href="{% url "donate" %}" class="btn flex items-center gap-2">
+                <span>Donate</span>
+                <i class="fa fa-donate"></i>
+            </a>
+        
+        </div>
+        
+        <div class="overflow-x-auto text-nowrap">
+            <table class="table-auto w-full mt-10">
+                <thead>
+                    <tr class='text-left border-b border-zinc-200'>
+                        <th class="p-4">SN</th>
+                        <th class="p-4">Donor</th>
+                        <th class="p-4">amount</th>
+                        {% if request.user.is_staff %}
+                            <th class="p-4">Privacy reason</th>
+                        {% endif %}
+                        <th class="p-4">Donation ID</th>
+                        <th class="p-4">date</th>
+                    </tr>
+                </thead>
+        
+                <tbody>
+                    {% for donation in donations %}
+                        <tr class="border-b border-zinc-200 hover:bg-zinc-50/50 cursor-pointer">
+                            <td class="p-4">
+                                <div class="flex items-center gap-4">
+                                    {{forloop.counter}}
+                                    {% if donation.privacy == "NO" %}
+                                        <i class="fa fa-lock text-red-400 text-xs"></i>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="p-4">
+                            {% if donation.donor and donation.donor.id != request.user.id and donation.privacy == "NO" %}
+                                Anonymous
+                            {% else %}
+                                {{ donation.donor }}
+                            {% endif %}
+                            
+                            
+                            </td>
+                            <td class="p-4">{{donation.amount}} </td>
+                            {% if request.user.is_staff %}
+                                <td class="p-4">{{donation.privacy_reason}} </td>
+                            {% endif %}
+                            <td class="p-4">{{donation.donation_key}} </td>
+                            <td class="p-4">{{ donation.created_at}}</td>
+                        </tr>
+                    {% empty %}
+                    
+                    <tr ><td class="p-4" colspan="4">No donation yet!</td></tr>
+                        
+                    
+                    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+    {% endif %}
+
+</div>
+
+
+

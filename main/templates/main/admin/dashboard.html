@@ -1,0 +1,64 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+
+{% include "includes/header.html" %}
+
+<div class="container mx-auto pt-25">
+
+    <div class="flex justify-between items-center">
+        <h1 class="font-medium text-4xl">Dashboard</h1>
+    </div>
+
+
+    
+    <div class="overflow-x-auto text-nowrap">
+        <table class="table-auto w-full mt-10">
+            <thead class="text-white bg-zinc-500">
+                <tr class=' text-left'>
+                    <th class="p-4">SN</th>
+                    <th class="p-4">Church Name</th>
+                    <th class="p-4">Overseer (ID)</th>
+                    <th class="p-4">No. Members</th>
+                    <th class="p-4">Status</th>
+                    <th class="p-4">Account</th>
+                    <th class="p-4 text-right">Delete</th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                {% for church in churches %}
+                    <tr class="border-b">
+                        <td class="p-4">{{forloop.counter}}</td>
+                        <td class="p-4">{{ church.name}}</td>
+                        <td class="p-4">{% if church.overseer.get_full_name %} {{church.overseer.title }} {{church.overseer.get_full_name}} {% else %} {{ church.overseer.username }} {% endif %}</td>
+                        <td class="p-4">{{ church.members.all | length }}</td>
+                        <td class="p-4"> {% if church.is_active %} <span class="text-green-400 font-medium">Active</span>{% else %} <span class="text-red-400 font-medium">Inactive</span> {% endif %}</td>
+                        <td class="p-4">
+                            <div class="flex gap-4">
+                                {% if church.is_active %}
+                                    <a href="{% url "account-activation" church.id %}" class="py-2 px-4 rounded border border-red-400 text-red-500 hover:bg-red-300">Deactivate</a>
+                                {% else %}
+                                    <a href="{% url "account-activation" church.id %}" class="py-2 px-4 rounded border border-green-400 text-green-500 hover:bg-green-300">Activate</a>
+                                {% endif %}
+                                
+                            </div>
+                        </td>
+                        <td class="text-right p-4"> <a href="{% url "delete-user" church.id %}"  class="cursor-pointer" ><i class="fa fa-trash text-red-400"></i></a></td>
+    
+                    </tr>
+                
+                {% empty %}
+                
+                
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    
+</div>
+
+
+{% endblock content %}

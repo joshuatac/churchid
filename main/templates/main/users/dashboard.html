@@ -1,0 +1,216 @@
+
+<div class="bg-white p-10 rounded-2xl shadow">
+    
+    <div class="grid grid-cols-1 {% if request.user.is_staff %} sm:grid-cols-3 {% else %} sm:grid-cols-2 {% endif %}  w-full gap-10">
+
+        {% if request.user.is_staff %}
+            <div class="w-full h-40 rounded shadow-md border border-gray-200 p-5">
+                <div class="flex gap-5">
+                    <div class="h-15 w-15 text-white rounded-full bg-primary-300 flex justify-center items-center">
+                        <i class="text-2xl fa fa-users"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-medium">Members</h3>
+
+                        <h1 class="text-4xl lg:text-5xl mt-6 font-semibold">{{ members | length}}</h1>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    
+        <div class="w-full h-40 rounded shadow-md border border-gray-200 p-5">
+            <div class="flex gap-5">
+                <div class="h-15 w-15 text-white rounded-full bg-primary-300 flex justify-center items-center">
+                    <i class="text-2xl fa fa-money-bill-1"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-medium">Total Donations</h3>
+
+                    <h1 class="text-4xl lg:text-5xl mt-6 font-semibold">$ 0</h1>
+                </div>
+            </div>
+        </div>
+    
+        <div class="w-full h-40 rounded shadow-md border border-gray-200 p-5">
+            <div class="flex gap-5">
+                <div class="h-15 w-15 text-white rounded-full bg-primary-300 flex justify-center items-center">
+                    <i class="text-2xl fa fa-envelope"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-medium">Prayer requests</h3>
+
+                    <h1 class="text-4xl lg:text-5xl mt-6 font-semibold">{{ prayers | length}}</h1>
+                </div>
+            </div>
+        </div>
+    
+
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-16">
+        <div class="shadow-md border border-gray-200 p-5 rounded">
+            <h3 class="text-xl font-medium">Recent Donations</h3>
+
+            <div class="donations mt-4">
+                {% for donation in donations  %}
+                    <div class="py-2">
+                        <h3 class="text-lg">
+
+                            {% if request.user.is_staff %}
+                                {{ donation}}
+
+                            {% else %}
+                                {{ donation.donor}} donated {{donation.amount}} {{ donation.currency}}
+
+                            {% endif %}
+                            
+                        </h3>
+                        <p class="text-xs">{{donation.created_at}}</p>
+                    </div>
+                
+                {% empty %}
+                <p>No donation yet</p>
+                
+                {% endfor %}
+                
+
+            </div>
+
+
+        </div>
+        <div class="shadow-md border border-gray-200 py-5 rounded min-h-96">
+            <h3 class="text-xl font-medium  px-5">Upcoming Events</h3>
+
+            <div class="events mt-4">
+
+                {% for event in events %}
+                    <a href="{% url "dashboard"  %}?id={{event.id}}" class="py-2 block hover:bg-zinc-50 cursor-pointer p-5">
+
+                        <h3 class="text-lg flex gap-5 item">{{event.theme}}</h3>
+                        <div class="flex items-center gap-4">
+                            <p class="text-xs">{{event.start_at}}</p>
+                            {% if event.end_at %}
+                            <p class="text-xs">to</p>
+                            <p class="text-xs">{{event.end_at}}</p>
+                            
+                            {% endif %}
+                        </div>
+                    </a>
+                {% empty %}
+                    <p class="px-5">No event yet</p>
+
+                {% endfor %}
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="bg-white p-10 rounded-2xl shadow mt-10" >
+    <h1 class="text-3xl font-semibold"> Latest Posts </h1>
+
+    <div class="mt-10">
+            
+        {% if post %}
+
+            <div>
+                <a href="{% url "posts" 'view' %}" class="bg-zinc-400 px-4 py-3 rounded  inline-block font-medium cursor-pointer text-white mb-10" >
+                    <span>Back</span>
+                </a>
+
+
+                <div class="container  max-w-3xl">
+                    <div class="post-image h-96 w-full mb-3">
+                        {% if post.image_url %}
+                            <img src="{{post.image_url}}" alt="{{post.title}}">
+                        
+                        {% else %}
+                            <div class="flex justify-center items-center h-full w-full bg-black/35">
+                                <span class="font-bold text-3xl text-white">{{ post.category}} </span>
+                            </div>
+                        
+                        {% endif %}
+                    </div>
+                    <div class="flex justify-between items-center mt-5 gap-4">
+                        <div class="text-xs"> <span class="font-bold">Posted:</span> {{post.created_at}}</div>
+                        <div class="text-xs"> <span class="font-bold">Updated:</span> {{post.updated_at}}</div>
+                        
+                    </div>
+
+                    <h1 class="text-3xl font-bold my-5">{{post.title}}</h1>
+                    <p class="">{{post.content}}</p>
+
+                    <div class="flex justify-between items-center mt-10">
+                        <a href="{% url "posts" 'edit' %}?id={{post.id}}" class="btn w-[10rem]">Edit</a>
+                        
+                    
+                        <a href="{% url "posts" 'delete' %}?id={{post.id}}" class="p-3 text-center rounded border border-red-400 text-red-500 hover:bg-red-100 transition cursor-pointer w-[10rem]">Delete</a>
+                
+            
+                    </div>
+
+                </div>
+
+            </div>
+        
+        {% else %}
+        
+            <div class="grid grid-cols-1 lg:grid-cols-3  gap-10">
+
+                {% for post in posts %}
+                    <div class="post shadow-md border border-gray-200 p-5 rounded">
+                        <div class="post-image h-64 w-full mb-3">
+                            {% if post.image_url %}
+                                <img src="{{post.image_url}}" alt="{{post.title}}">
+                            
+                            {% else %}
+                                <div class="flex justify-center items-center h-full w-full bg-black/35">
+                                    <span class="font-bold text-3xl text-white">{{ post.category}} </span>
+                                </div>
+                            
+                            {% endif %}
+                        </div>
+
+                        <h1 class="text-2xl font-medium mb-2">{{post.title}}</h1>
+                        <p>{{post.content | truncatechars:60}}</p>
+
+                        <div class="flex justify-end items-center mt-5 gap-4">
+                            <div>
+                                <div class="text-xs mb-2">{{post.created_at}}</div>
+                                {% if post.category == "TESTIMONY"  %}
+                                    <div class="text-xs  bg-primary-100 py-1 px-4 rounded-3xl">{{post.category}}</div>
+                                
+                                {% elif post.category == "NEWS" %}
+                                    <div class="text-xs  bg-primary-200 py-1 px-4 rounded-3xl">{{post.category}}</div>
+
+                                {% elif post.category == "SERMON"  %}
+                                    <div class="text-xs  bg-primary-300 py-1 px-4 rounded-3xl">{{post.category}}</div>
+
+                                {% else %}
+                                    <div class="text-xs  bg-blue-400 py-1 px-4 rounded-3xl">{{post.category}}</div>
+
+                                {% endif %}
+                            </div>
+                            <a href="{% url "posts" 'view' %}?id={{post.id}}" class="btn bg-primary-300 inline-block ml-auto " >
+                                <span>Read More</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                {% empty %}
+                    <p>No post yet</p>
+                {% endfor %}
+                
+            </div>
+        
+        {% endif %}
+
+
+    </div>
+</div>
+
+{% include "includes/event_modal.html" with back="dashboard" %}

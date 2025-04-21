@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+{% include "includes/header.html" %}
+
+
+<div class="container pt-25 mx-auto">
+
+    <div class="px-8 py-12  w-full max-w-lg  flex mx-auto justify-center border border-primary-200 rounded-3xl">
+        <div class="text-center text-primary">
+            <div class=" max-w-28 mx-auto mb-5">
+                <img src="" alt="" />
+            </div>
+            <div class="font-semibold text-3xl mb-5">Registration Successful!</div>
+            <div class="text-20 mt-1">Your account has been successfully registered and is now under verification. Please check your email for updates on the process. Thank you!</div>
+            <a href="{% url "landing" %}" class="p-4 text-center bg-primary-400 text-white mx-auto   hover:bg-primary-500 transition cursor-pointer w-[15rem] rounded mt-10 block">
+                Home
+            </a>
+        </div>
+    </div>
+</div>
+ 
+
+{% endblock content %}
+
+

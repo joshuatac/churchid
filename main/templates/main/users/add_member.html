@@ -1,0 +1,91 @@
+<div class="bg-white p-10 rounded-2xl shadow">
+
+    <a href="{% url "members" %}" class="bg-zinc-400 px-4 py-3 rounded  inline-block font-medium cursor-pointer text-white mb-10" >
+        <span>Back</span>
+    </a>
+
+    <form  class="container" method="post">
+        {% csrf_token %}
+        
+        {% if request.user.is_staff %}
+            <div class="mb-5">
+                <div class="font-medium mb-2">Title</div>
+                {{form.title}}
+                <small class="text-primary-400">{{form.title.errors}}</small>
+            </div>
+        
+        {% endif %}
+    
+        <div class="flex gap-10 items-center"> 
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">First name</div>
+                {{form.first_name}}
+                <small class="text-primary-400">{{form.first_name.errors}}</small>
+            </div>
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Last Name</div>
+                {{form.last_name}}
+                <small class="text-primary-400">{{form.email.errors}}</small>
+            </div>
+        </div>
+
+        <div class="mb-5">
+            <div class="font-medium mb-2">Department</div>
+            {{form.department}}
+            <small class="text-primary-400">{{form.department.errors}}</small>
+        </div>
+
+        <div class="flex gap-10 items-center"> 
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Email</div>
+                {{form.email}}
+                <small class="text-primary-400">{{form.email.errors}}</small>
+            </div>
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Phone</div>
+                {{form.phone}}
+                <small class="text-primary-400">{{form.phone.errors}}</small>
+            </div>
+    
+        </div>
+
+        <div class="mb-5">
+            <div class="font-medium mb-2">Address</div>
+            {{form.address}}
+            <small class="text-primary-400">{{form.address.errors}}</small>
+        </div>
+
+        <div class="flex gap-10 items-center"> 
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Box Number</div>
+                {{form.box_number}}
+                <small class="text-primary-400">{{form.box_number.errors}}</small>
+            </div>
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Sex</div>
+                {{form.sex}}
+                <small class="text-primary-400">{{form.sex.errors}}</small>
+            </div>
+    
+        </div>        
+        
+
+ 
+        <button type="submit" class="p-4 mt-10 text-center bg-primary-400 text-white  hover:bg-primary-500 transition cursor-pointer w-[15rem] rounded">Register</button>
+
+
+
+    </form>
+    
+
+
+
+
+
+
+
+    
+</div>
+
+
+

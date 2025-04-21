@@ -1,0 +1,47 @@
+
+<div class="bg-white p-10 rounded-2xl shadow">
+    <form class="flex items-end gap-4" method="post" class="max-w-[50rem]">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit" class=" px-4 mt-2 center btn transition cursor-pointer  rounded"> {% if edit %} Update {% else %} Create{% endif %}</button>
+    </form>
+
+   
+    <div class="overflow-x-auto text-nowrap">
+        <table class="table-auto w-full mt-10">
+            <thead>
+                <tr class='text-left border-b border-zinc-200'>
+                    <th class="p-4">SN</th>
+                    <th class="p-4">Department</th>
+                    <th class="p-4">Leader</th>
+                    <th class="p-4">No. members</th>
+                    <th class="p-4">Action</th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                {% for department in departments %}
+                    <tr class="border-b border-zinc-200 hover:bg-zinc-50/50 cursor-pointer">
+                        <td class="p-4">{{forloop.counter}}</td>
+                        <td class="p-4">{{department.name}}</td>
+                        <td class="p-4">{{department.leader.get_full_name}} </td>
+                        <td class="p-4">{{department.members.all|length}} </td>
+                        <td class="p-4"> 
+                            <div class="flex items-center gap-5">
+                              <a href="{% url "departments" %}?id={{department.id}}" class="text-yellow-400">Edit <i class="fa fa-edit"></i></a>
+                              <a href="{% url "departments" %}?delete={{department.id}}" class="text-red-400">Delete <i class="fa fa-trash"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                <tr ><td colspan="4" class="p-4">No department yet!</td></tr>
+
+                
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+

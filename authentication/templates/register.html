@@ -1,0 +1,359 @@
+{% extends "index.html" %}
+{% load static %}
+
+
+
+{% block content %}
+
+{% include "includes/header.html" %}
+
+    {% comment %} SEND OTP TO EMAIL {% endcomment %}
+    {% if  screen == 'email-verification' %}
+
+        <div class="container mx-auto pt-25 max-w-md ">
+            <div  class="text-center mb-10">
+                <h1 class="text-4xl font-medium">Email Verification</h1>
+                <p class="mt-4">Enter your email for Verification code</p>
+            </div>
+        
+            <form method="post">
+                {% csrf_token %}
+        
+                <div class="mb-5 w-full">
+                    <div class="font-medium mb-2">Email Adresss</div>
+                    {{form.email}}
+                    <small class="text-red-400">{{form.name.errors}}</small>
+                </div>
+        
+                {% include "includes/feedback.html" %}                     
+
+            <button type="submit" class="p-4 my-10 text-center bg-primary-400 text-white  hover:bg-primary-500 transition cursor-pointer  w-full rounded">Continue</button>
+        
+            </form>
+
+        </div>
+
+    {% comment %} VERIFY OTP {% endcomment %}
+    {% elif screen == "otp-verification" %}
+
+        <div class="container mx-auto pt-25 max-w-md ">
+
+            <div  class="text-center mb-10">
+                <h1 class="text-4xl font-medium">OTP Verification</h1>
+                <p class="mt-4">Enter the 6-digit code sent to your email</p>
+            </div>
+
+            <form  method="POST" class="space-y-6">
+                {% csrf_token %}
+                <div class="flex justify-between gap-2">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" required name="otp" 
+                        class="w-12 h-12 text-center text-xl border-2 border-primary-400 rounded-lg focus:outline-none focus:ring-3 focus:ring-primary-400/30" />
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" required name="otp"
+                        class="w-12 h-12 text-center text-xl border-2 border-primary-400 rounded-lg focus:outline-none focus:ring-3 focus:ring-primary-400/30" />
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" required name="otp"
+                        class="w-12 h-12 text-center text-xl border-2 border-primary-400 rounded-lg focus:outline-none focus:ring-3 focus:ring-primary-400/30" />
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" required name="otp"
+                        class="w-12 h-12 text-center text-xl border-2 border-primary-400 rounded-lg focus:outline-none focus:ring-3 focus:ring-primary-400/30" />
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" required name="otp"
+                        class="w-12 h-12 text-center text-xl border-2 border-primary-400 rounded-lg focus:outline-none focus:ring-3 focus:ring-primary-400/30" />
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" required name="otp"
+                        class="w-12 h-12 text-center text-xl border-2 border-primary-400 rounded-lg focus:outline-none focus:ring-3 focus:ring-primary-400/30" />
+                </div>
+
+                {% include "includes/feedback.html" %}                     
+
+        
+                <button type="submit" class="p-4 my-10 text-center bg-primary-400 text-white  hover:bg-primary-500 transition cursor-pointer  w-full rounded">Verify</button>
+
+            </form>
+
+        </div>
+        <script>
+            const inputs = document.querySelectorAll('input[type="text"]');
+        
+            inputs.forEach((input, index) => {
+              input.addEventListener('input', (e) => {
+                const value = e.target.value;
+                if (!/^\d$/.test(value)) {
+                  e.target.value = ''; // Reject non-digit characters
+                  return;
+                }
+                if (value && index < inputs.length - 1) {
+                  inputs[index + 1].focus();
+                }
+              });
+        
+              input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                  inputs[index - 1].focus();
+                }
+              });
+            });
+          </script>
+
+    {% comment %} SELECT OPTION (CHURCH/MEMBER) {% endcomment %}
+    {% elif screen == 'options' %}
+
+        <div class="flex justify-center w-full">
+            <div class="w-[95%] pt-25">
+                {% include "includes/feedback.html" %}                     
+
+                <div class="flex gap-10 sm:flex-row flex-col justify-center mt-10">
+
+                    <div class="shadow-lg rounded-2xl sm:max-w-xs">
+                        <div class="flex justify-center items-center h-44">
+                            <i class="fa fa-users text-7xl  text-primary-400"></i>
+                        </div>
+
+
+                        <div class="p-5">
+                            <div class="text-2xl text-center mb-5">Register as <span class="text-primary-400 font-bold">Member</span></div>
+                            
+
+                            <a href="{% url "register" 'select-church' %}" class="btn w-full block">Continue</a>
+                        </div>
+                    </div>
+
+                    <div class="shadow-lg rounded-2xl sm:max-w-xs ">
+                        <div class="flex justify-center items-center h-44">
+                            <i class="fa fa-church text-7xl  text-primary-400"></i>
+                        </div>
+
+
+                        <div class="p-5">
+                            <div class="text-2xl text-center mb-5">Register as a  <span class="text-primary-400 font-bold">Church</span></div>
+                            
+
+                            <a href="{% url "register" 'church' %}" class="btn w-full block">Continue</a>
+                        </div>
+                    </div>
+            
+                </div>
+            </div>
+        </div>               
+                    
+    {% comment %} SELECT CHURCH {% endcomment %}
+    {% elif screen == 'select-church' %}
+
+        <div class="container mx-auto pt-25">
+
+            <h1 class="text-center text-4xl font-medium mb-5">Select Church</h1>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-4 gap-5">
+                {% for church in churches %}
+                <a href="{% url "register" 'member' %}?church={{church.id}}" class="text-2xl bg-zinc-500 shadow-md hover:bg-primary-300 min-h-[20rem] transition rounded-xl p-4 flex justify-center items-center flex-col">
+                    <div class="w-24 h-24 rounded-full overflow-hidden">
+                        <img src="{{church.logo_url}}" alt="">
+                    </div>
+                    <span class="mt-8 font-medium text-white">{{church.name}}</span>
+                </a>
+                
+                    
+        
+                {% empty %}
+                    <h2>No Church Yet!</h2>
+                {% endfor %}
+
+            </div>
+                
+
+        </div>
+        
+    {% comment %} REGISTER {% endcomment %}
+    {% else %}
+        <div class="md:flex fixed top-0 w-full">
+
+            <div class="w-full register_bg h-screen md:flex  hidden justify-center items-center relative">
+                <div class="overlay">
+                    <div class="w-24 h-24 rounded-full overflow-hidden mx-auto mb-5">
+                        <img src="{{church.logo_url}}" alt="">
+                    </div>
+                    <span class="mt-8 font-bold text-white text-5xl">{{church.name}}</span>
+
+                </div>
+
+
+            </div>
+            
+                <div class="flex justify-center w-full pt-25 overflow-y-auto h-screen">
+                    
+                    {% if screen == "church" %}
+                        <div class="w-[90%] max-w-[40rem]">
+                            <div  class="text-center mb-10">
+                                <h1 class="text-4xl font-medium">Register</h1>
+                                <p class="mt-4">Church registration form</p>
+                            </div>
+
+                            <form  method="post"  enctype="multipart/form-data" class="pb-10">
+                                {% csrf_token %}
+                        
+                                <div class="mb-5 w-full">
+                                    <div class="font-medium mb-2">Church Name</div>
+                                    {{form.name}}
+                                    <small class="text-red-400">{{form.name.errors}}</small>
+                                </div>
+                                <div class="flex gap-10 items-center"> 
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">Email</div>
+                                        {{form.email}}
+                                        <small class="text-red-400">{{form.email.errors}}</small>
+                                    </div>
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">Branch Type</div>
+                                        {{form.branch_type}}
+                                        <small class="text-red-400">{{form.branch_type.errors}}</small>
+                                    </div>
+                                </div>
+
+                                <div class="mb-5 w-full">
+                                    <div class="font-medium mb-2">Address</div>
+                                    {{form.address}}
+                                    <small class="text-red-400">{{form.address.errors}}</small>
+                                </div>
+
+
+                    
+                                <div class="flex gap-10 items-center"> 
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">Denomination</div>
+                                        {{form.denomination}}
+                                        <small class="text-red-400">{{form.denomination.errors}}</small>
+                                    </div>
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">Founded</div>
+                                        {{form.founded}}
+                                        <small class="text-red-400">{{form.founded.errors}}</small>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="mb-5 w-full">
+                                    <div class="font-medium mb-2">Website</div>
+                                    {{form.website}}
+                                    <small class="text-red-400">{{form.website.errors}}</small>
+                                </div>
+                    
+                                <div class="mb-5 w-full">
+                                    <div class="font-medium mb-2">Branch Name</div>
+                                    {{form.branch_name}}
+                                    <small class="text-red-400">{{form.branch_name.errors}}</small>
+                                </div>
+                            
+                        
+                                <div class="flex gap-10 items-center"> 
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">Password</div>
+                                        {{form.password}}
+                                        <small class="text-red-400">{{form.password.errors}}</small>
+                                    </div>
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">Confirm Password</div>
+                                        {{form.confirm_password}}
+                                        <small class="text-red-400">{{form.confirm_password.errors}}</small>
+                                    </div>
+                            
+                                </div> 
+                                {% include "includes/feedback.html" %}                     
+
+
+                                <button type="submit" class="p-4 my-10 text-center bg-primary-400 text-white  hover:bg-primary-500 transition cursor-pointer w-[15rem] rounded">Register</button>
+
+                    
+                            </form>
+                        </div>
+
+
+                    {% else %}
+                        <div class="w-[90%] max-w-[45rem]">
+                            <div  class="text-center mb-14">
+                                <h1 class="text-4xl font-medium">Register</h1>
+                                <p class="mt-4">Churh membership form</p>
+                            </div>
+
+
+
+                            <form  method="post">
+                                {% csrf_token %}
+                        
+                                <div class="flex gap-10 items-center"> 
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">First name</div>
+                                        {{form.first_name}}
+                                        <small class="text-red-400">{{form.first_name.errors}}</small>
+                                    </div>
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">Last Name</div>
+                                        {{form.last_name}}
+                                        <small class="text-red-400">{{form.email.errors}}</small>
+                                    </div>
+                                </div>
+
+                                <div class="mb-5">
+                                    <div class="font-medium mb-2">Address</div>
+                                    {{form.address}}
+                                    <small class="text-red-400">{{form.address.errors}}</small>
+                                </div>
+
+                    
+                                <div class="flex gap-10 items-center"> 
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">Email</div>
+                                        {{form.email}}
+                                        <small class="text-red-400">{{form.email.errors}}</small>
+                                    </div>
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">Phone</div>
+                                        {{form.phone}}
+                                        <small class="text-red-400">{{form.phone.errors}}</small>
+                                    </div>
+                                </div>
+                    
+                            
+                                <div class="flex gap-10 items-center"> 
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">Box Number</div>
+                                        {{form.box_number}}
+                                        <small class="text-red-400">{{form.box_number.errors}}</small>
+                                    </div>
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">Sex</div>
+                                        {{form.sex}}
+                                        <small class="text-red-400">{{form.sex.errors}}</small>
+                                    </div>
+                            
+                                </div>  
+
+                                <div class="flex gap-10 items-center"> 
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">Password</div>
+                                        {{form.password1}}
+                                        <small class="text-red-400">{{form.password1.errors}}</small>
+                                    </div>
+                                    <div class="mb-5 w-full">
+                                        <div class="font-medium mb-2">Confirm Password</div>
+                                        {{form.password2}}
+                                        <small class="text-red-400">{{form.password2.errors}}</small>
+                                    </div>
+                            
+                                </div> 
+                                
+                                {% include "includes/feedback.html" %}                     
+
+
+                                <button type="submit" class="p-4 my-10 text-center bg-primary-400 text-white  hover:bg-primary-500 transition cursor-pointer w-[15rem] rounded">Register</button>
+
+                    
+                            </form>
+                            {% endif %}
+            
+
+                        </div>
+
+                        
+                    </div>
+                
+        </div>
+      
+    {% endif %}
+
+{% endblock content %}

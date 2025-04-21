@@ -1,0 +1,33 @@
+
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="px-2 bg-red-100">
+                <small class="{{ message.tags }} text-red-400">{{ message }}</small>
+            </div>
+
+        {% elif message.tags == 'success' %}
+            <div class="px-2 bg-green-100">
+                <small class="{{ message.tags }} text-green-400">{{ message }}</small>
+            </div>
+
+        {% elif message.tags == 'warning' %}
+            <div class="px-2 bg-blue-100">
+                <small class="{{ message.tags }} text-blue-400">{{ message }}</small>
+            </div>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endif %} 
+
+
+<script>
+    const message = document.querySelector(".messages")
+    if (message) {
+        setTimeout(() => {
+            message.style.display = "none"
+        }, 5000);
+    }
+</script>

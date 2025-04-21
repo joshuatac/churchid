@@ -1,0 +1,189 @@
+<div class="bg-white p-10 rounded-2xl shadow">
+    
+    <div class="flex gap-5 items-start h-fit justify-between">
+    
+    
+        
+
+      
+            <div class="flex items-center gap-5 mb-10">
+        
+                {% if state == "view" %}
+        
+                    <a href="{% url "profile-edit" type profile.id  %}" class="btn-outline flex items-center gap-2 ">
+                        <span>Edit</span>
+                        <i class="fa fa-edit"></i>
+                    </a>
+        
+        
+                {% else %}
+        
+                    <a href="{% url "profile" type profile.id  %}" class="btn-outline flex items-center gap-2 ">
+                        <span>View</span>
+                        <i class="fa fa-eye"></i>
+                    </a>
+        
+                
+                {% endif %}
+                
+        
+        
+        
+            </div>
+
+            <a href="{% url "members" %}" class="bg-zinc-400 px-4 py-3 rounded  font-medium cursor-pointer text-white flex items-center gap-2">
+                <i class="fa fa-backward-arrow"></i>
+                <span>Back</span>
+            </a>
+    
+    </div>
+
+
+    {% if state == "view" %}
+    <div class="container">
+
+        
+        <div class="mb-5">
+            <div class="font-medium mb-2">Name</div>
+            <p class="border border-zinc-200 rounded h-12 flex items-center px-4">{{profile.title}} {{profile.get_full_name}}</p>
+        </div>
+    
+        <div class="flex gap-10 items-center"> 
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Email</div>
+                <p class="border border-zinc-200 rounded h-12 flex items-center px-4">{{profile.email}}</p>
+            </div>
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Phone</div>
+                <p class="border border-zinc-200 rounded h-12 flex items-center px-4">{{profile.phone}}</p>
+            </div>
+    
+        </div>
+
+        <div class="mb-5">
+            <div class="font-medium mb-2">Address</div>
+            <p class="border border-zinc-200 rounded h-12 flex items-center px-4">{{profile.address}}</p>
+        </div>
+
+        <div class="flex gap-10 items-center"> 
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Box Number</div>
+                <p class="border border-zinc-200 rounded h-12 flex items-center px-4">{{profile.box_number}}</p>
+            </div>
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Sex</div>
+                <p class="border border-zinc-200 rounded h-12 flex items-center px-4">{{profile.sex}}</p>
+            </div>
+    
+        </div>        
+        
+        {% if request.user.is_staff %}
+            <div class="mb-5">
+                <div class="font-medium mb-2">Department</div>
+                <p class="border border-zinc-200 rounded h-12 flex items-center px-4">{{profile.department.name}}</p>
+            </div>
+        
+        {% endif %}
+
+
+
+    </div>
+    {% else %}
+
+    <form action="{% url "profile-edit" type profile.id %}" class="container" method="post">
+        {% csrf_token %}
+        
+        {% if request.user.is_staff %}
+            <div class="mb-5">
+                <div class="font-medium mb-2">Title</div>
+                {{form.title}}
+                <small class="text-primary-400">{{form.title.errors}}</small>
+            </div>
+        
+        {% endif %}
+    
+        <div class="flex gap-10 items-center"> 
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">First name</div>
+                {{form.first_name}}
+                <small class="text-primary-400">{{form.first_name.errors}}</small>
+            </div>
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Last Name</div>
+                {{form.last_name}}
+                <small class="text-primary-400">{{form.email.errors}}</small>
+            </div>
+        </div>
+
+        {% if request.user.is_staff %}
+        
+            <div class="mb-5">
+                <div class="font-medium mb-2">Department</div>
+                {{form.department}}
+                <small class="text-primary-400">{{form.department.errors}}</small>
+            </div>
+        
+        {% endif %}
+
+        <div class="flex gap-10 items-center"> 
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Email</div>
+                {{form.email}}
+                <small class="text-primary-400">{{form.email.errors}}</small>
+            </div>
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Phone</div>
+                {{form.phone}}
+                <small class="text-primary-400">{{form.phone.errors}}</small>
+            </div>
+    
+        </div>
+
+        <div class="mb-5">
+            <div class="font-medium mb-2">Address</div>
+            {{form.address}}
+            <small class="text-primary-400">{{form.address.errors}}</small>
+        </div>
+
+        <div class="flex gap-10 items-center"> 
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Box Number</div>
+                {{form.box_number}}
+                <small class="text-primary-400">{{form.box_number.errors}}</small>
+            </div>
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Sex</div>
+                {{form.sex}}
+                <small class="text-primary-400">{{form.sex.errors}}</small>
+            </div>
+    
+        </div>        
+        
+
+        <div class="flex justify-between items-center mt-10">
+            <button type="submit" class="btn w-[10rem]">Update</button>
+            
+            {% if  type == 'members' %}
+                <a href="{% url "delete-user" profile.id %}" type="submit" class="p-3 text-center rounded border border-red-400 text-red-500 hover:bg-red-100 transition cursor-pointer w-[10rem]">Delete</a>
+            {% endif %}
+
+        </div>
+
+
+
+
+    </form>
+    
+    {% endif %}
+
+
+
+
+
+
+
+    
+</div>
+
+
+

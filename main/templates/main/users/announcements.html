@@ -1,0 +1,65 @@
+
+<style>
+    #id_published {
+        height: 1.5rem;
+        width: 1.5rem
+    }
+</style>
+
+<div class="bg-white p-10 rounded-2xl shadow">
+    <form  method="post" class="max-w-[50rem]">
+        {% csrf_token %}
+        <div class="mb-5 w-full">
+            <div class="font-medium mb-2">Content</div>
+            {{form.content}}
+            <small class="text-red-400">{{form.content.errors}}</small>
+        </div>
+        <div class="flex justify-between items-start">
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Published</div>
+                {{form.published}}
+                <small class="text-red-400">{{form.email.errors}}</small>
+            </div>
+            <button type="submit" class=" px-4 mt-2 center btn transition cursor-pointer  rounded"> {% if edit %} Update {% else %} Create{% endif %}</button>
+        </div>
+    </form>
+
+   
+    <div class="overflow-x-auto text-nowrap">
+        <table class="table-auto w-full mt-10">
+            <thead>
+                <tr class='text-left border-b border-zinc-200'>
+                    <th class="p-4">SN</th>
+                    <th class="p-4">Published</th>
+                    <th class="p-4">Content</th>
+                    <th class="p-4">Created</th>
+                    <th class="p-4">Action</th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                {% for announcement in announcements %}
+                    <tr class="border-b border-zinc-200 hover:bg-zinc-50/50 cursor-pointer">
+                        <td class="p-4">{{forloop.counter}}</td>
+                        <td class="p-4"> {% if announcement.published %} <span class="text-green-400 font-medium fa fa-check"></span>{% else %} <span class="text-red-400 font-medium fa fa-times"></span> {% endif %}</td>
+                        <td class="p-4">{{announcement.content}} </td>
+                        <td class="p-4">{{announcement.created_at}} </td>
+                        <td class="p-4"> 
+                            <div class="flex items-center gap-5">
+                              <a href="{% url "announcements" %}?id={{announcement.id}}" class="text-yellow-400">Edit <i class="fa fa-edit"></i></a>
+                              <a href="{% url "announcements" %}?delete={{announcement.id}}" class="text-red-400">Delete <i class="fa fa-trash"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                <tr ><td colspan="4" class="p-4">No announcement yet!</td></tr>
+
+                
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+

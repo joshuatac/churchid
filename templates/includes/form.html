@@ -1,0 +1,16 @@
+<form method="post" enctype="multipart/form-data" class="pb-10">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="mt-4">
+        <div for="">{{field.label | upper}}</div>
+        {{field}}
+        <small class="text-red-400">{{field.errors}}</small>
+    </div>
+    {% endfor %} 
+
+    {% include "includes/feedback.html" %}                     
+
+                        
+    <button type="submit" class="p-4 mt-10 text-center bg-primary-400 text-white  hover:bg-primary-500 transition cursor-pointer w-[15rem] rounded"> {{button_text}}</button>
+
+</form>

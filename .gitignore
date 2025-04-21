@@ -1,0 +1,8 @@
+env/
+.env
+
+node_modules/
+
+# Ignore Django migration files
+**/migrations/*.py
+!**/migrations/__init__.py

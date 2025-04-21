@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+
+{% include "includes/header.html" %}
+
+<div id="hero" class="w-full h-screen">
+
+    <div class="container h-full flex justify-center items-center mx-auto">
+        <div class="hero-content relative">
+            <h1 class="text-6xl text-white text-center">The <span class="font-semibold">Truth </span>shall set you <span class="font-semibold">Free</span></h1>
+
+            <a href="{% url "register" 'email-verification' %}" class="block mx-auto mt-5 border-2 border-primary-200 max-w-[10rem] text-2xl font-medium text-center rounded-4xl py-2 px-4 text-white hover:bg-primary-200 transition"> Join Us</a>
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

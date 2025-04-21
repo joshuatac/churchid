@@ -1,0 +1,87 @@
+
+<style>
+    #id_published {
+        height: 1.5rem;
+        width: 1.5rem
+    }
+</style>
+
+<div class="bg-white p-10 rounded-2xl shadow">
+
+    {% if not request.user.is_staff %}
+        <form  method="post" class="max-w-[50rem] mb-10">
+            {% csrf_token %}
+            <div class="mb-5 w-full">
+                <div class="font-medium mb-2">Request</div>
+                {{form.content}}
+                <small class="text-red-400">{{form.content.errors}}</small>
+            </div>
+            <div class="flex justify-end items-start">
+                <button type="submit" class=" px-4 mt-2 center btn transition cursor-pointer  rounded"> {% if edit %} Update {% else %} Create{% endif %}</button>
+            </div>
+        </form>
+    {% endif %}
+
+   
+    <div class="overflow-x-auto text-nowrap">
+        <table class="table-auto w-full">
+            <thead>
+                <tr class='text-left border-b border-zinc-200'>
+                    <th class="p-4">SN</th>
+                    <th class="p-4">Sender</th>
+                    <th class="p-4">Requests</th>
+                    <th class="p-4">Status</th>
+                    <th class="p-4">Date</th>
+                    <th class="p-4">Action</th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                {% for prayer in prayers %}
+                    <tr class="border-b border-zinc-200 hover:bg-zinc-50/50 cursor-pointer">
+                        <td class="p-4">{{forloop.counter}}</td>
+                        <td class="p-4">{{prayer.sender.get_full_name}}</td>
+                        <td class="p-4">{{prayer.content| truncatechars:50}}  {% if prayer.content|length > 49 %} <a href="{% url 'prayers' %}?id={{prayer.id}}"><i class="fa fa-eye"></i></a> {% endif %}</td>
+                        <td class="p-4"> 
+                            {% if prayer.status == 'PRAYED_FOR' %} 
+                                <span class="text-green-400 font-medium"> {{prayer.status}}</span>
+                            {% else %} 
+                                <span class="text-red-400 font-medium"> {{prayer.status}}</span> 
+                            {% endif %}</td>
+                        <td class="p-4">{{prayer.created_at}} </td>
+                        <td class="p-4"> 
+                            {% if request.user.is_staff %}
+                            
+                            <form   class="max-w-[50rem]">
+                                <input type="hidden" name="id" value="{{prayer.id}}">
+                                <div class="flex justify-start items-start gap-4">
+                                <div class="">
+                                    {{form.status}}
+                                    <small class="text-red-400">{{form.status.errors}}</small>
+                                </div>
+                                    <button type="submit" class=" px-4  btn transition cursor-pointer  rounded">Change</button>
+                                </div>
+                            </form>
+                            {% else %}
+                            
+                            <div class="flex items-center gap-5">
+                                <a href="{% url "prayers" %}?edit={{prayer.id}}" class="text-yellow-400">Edit <i class="fa fa-edit"></i></a>
+                                <a href="{% url "prayers" %}?delete={{prayer.id}}" class="text-red-400">Delete <i class="fa fa-trash"></i></a>
+                            </div>
+                            
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                <tr ><td colspan="4" class="p-4">No prayer yet!</td></tr>
+
+                
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% include "includes/prayer_modal.html" with back="prayers" %}
+

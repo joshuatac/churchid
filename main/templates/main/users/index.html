@@ -1,0 +1,205 @@
+{% extends "index.html" %}
+{% load my_filters %}
+
+{% block content %}
+
+
+
+
+<div class="bg-zinc-100 fixed top-0 left-0 h-screen w-full">
+
+    {% get_new_members as new_members %}
+    {% get_new_prayers as new_prayers %}
+
+    <div class="flex w-full">
+        <div class="w-full max-w-xs bg-primary-400 text-white p-5 sticky top-0 h-screen menubar z-10">
+
+            <div class="flex justify-between items-start">
+                <a href="{% url "dashboard" %}" class="logo flex gap-3 items-end mb-10">
+                    <i class="fa fa-bible text-4xl"></i>
+                    <span class="text-3xl/5 font-bold text-white">CHURCH ID</span>
+                </a>
+
+
+                <div class="ring-2 ring-white rounded-lg h-10 w-10 flex justify-center items-center p-2 md:hidden cursor-pointer toggler">
+                    <i class="fa fa-times text-3xl text-white"></i>
+                </div>
+
+
+
+            </div>
+   
+            <div>
+                <a href="{% url "dashboard" %}" class="p-4 flex items-center gap-3 hover:bg-primary-100 hover:text-primary-400 font-medium {% if active_menu == "dashboard" %}bg-primary-100 text-primary-400{% endif %}">
+                    <i class="fa fa-display text-xl"></i>
+                     Dashboard 
+                    
+                </a>
+    
+                {% if request.user.is_staff %}
+                    <a href="{% url "members" %}" class="p-4 flex items-center gap-3 hover:bg-primary-100 hover:text-primary-400 font-medium {% if active_menu == "members" %}bg-primary-100 text-primary-400{% endif %}">
+                        <i class="fa fa-users text-xl"></i>
+                        <span> Members </span>
+                        {% if new_members|length > 0 %} 
+                            <span class="flex justify-center items-center bg-zinc-400 rounded-xl text-white py-1 px-2 text-xs"> {{ new_members|length}} new</span>
+                        {% endif %}
+                    </a>
+                    <a href="{% url "events" 'view' %}" class="p-4 flex items-center gap-3 hover:bg-primary-100 hover:text-primary-400 font-medium {% if active_menu == "events"%}bg-primary-100 text-primary-400{% endif %}"> 
+                        <i class="fa-solid fa-list-check text-xl"></i>
+                        Events 
+                    </a>
+                    <a href="{% url "departments" %}" class="p-4 flex items-center gap-3 hover:bg-primary-100 hover:text-primary-400 font-medium {% if active_menu == "departments"%}bg-primary-100 text-primary-400{% endif %}"> 
+                        <i class="fa-solid fa-table text-xl"></i>
+                        Departments 
+                    </a>
+                    <a href="{% url "announcements" %}" class="p-4 flex items-center gap-3 hover:bg-primary-100 hover:text-primary-400 font-medium {% if active_menu == "announcements"%}bg-primary-100 text-primary-400{% endif %}"> 
+                        <i class="fa-solid fa-bullhorn text-xl"></i>
+                        Announcements 
+                    </a>
+                    {% endif %}
+                <a href="{% url "posts" 'view' %}" class="p-4 flex items-center gap-3 hover:bg-primary-100 hover:text-primary-400 font-medium {% if active_menu == "posts"%}bg-primary-100 text-primary-400{% endif %}"> 
+                    <i class="fa-solid fa-newspaper text-xl"></i>
+                    Posts 
+                </a>
+                
+                <a href="{% url "prayers" %}" class="p-4 flex items-center gap-3 hover:bg-primary-100 hover:text-primary-400 font-medium {% if active_menu == "prayers" %}bg-primary-100 text-primary-400{% endif %} flex items-center gap-5">
+                    <i class="fa-solid fa-envelope text-xl"></i>
+    
+                     Prayer Requests
+                    {% if request.user.is_staff %}
+                        {% if new_prayers|length > 0 %} 
+                        <span class="lex justify-center items-center bg-zinc-400 rounded-xl text-white py-1 px-2 text-xs"> {{ new_prayers|length}} new</span>
+                        {% endif %}
+                    {% endif %}
+                </a>
+                <a href="{% url "donations" %}" class="p-4 flex items-center gap-3 hover:bg-primary-100 hover:text-primary-400 font-medium {% if active_menu == "donations" %}bg-primary-100 text-primary-400{% endif %}">
+                    <i class="fa-solid fa-donate text-xl"></i>
+    
+                     Donations 
+                    </a>
+                <a href="{% url "profile"  'mine' request.user.id %}" class="p-4 flex items-center gap-3 hover:bg-primary-100 hover:text-primary-400 font-medium {% if active_menu == "mine"  %}bg-primary-100 text-primary-400{% endif %}"> 
+                    <i class="fa-solid fa-user text-xl"></i>
+    
+                    Profile 
+                </a>
+                <a href="{% url "logout" %}" class="p-4 flex items-center gap-3 hover:bg-primary-100 hover:text-primary-400 font-medium"> 
+                    <i class="fa-solid fa-door-open"></i>
+                    Logout 
+                </a>
+            </div>
+        
+        </div>
+
+
+        <div class="w-full overflow-y-auto h-screen">
+
+            
+            {% comment %} Header {% endcomment %}
+            <div class="p-5 shadow-lg bg-white mb-5 sticky top-0 z-0">
+
+                <div class="flex justify-between flex-wrap items-center gap-3">
+                    <div>
+                        <h1 class="text-3xl font-semibold"> {{screen | title}} </h1>
+                        <p class="font-medium">ID: {{request.user.username}}</p>
+                    </div>
+
+                    <div class="hidden md:flex gap-2  items-center">
+                        <i class="fa-solid fa-church text-xl"></i>
+                        <h6 class="font-medium text-xl" style="line-height: 0;">{{ request.user.church.name | truncatechars:30}}</h6> 
+                    </div>
+            
+                    <div class="ring-2 ring-primary-400 rounded-lg h-10 w-10 flex justify-center items-center p-2 md:hidden cursor-pointer toggler">
+                        <i class="fa fa-bars text-3xl"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            {% comment %} Announcements {% endcomment %}
+            {% if announcements|length is not 0 %}
+                <div class="bg-white py-5 relative" style="z-index: -10;">
+                    <marquee>
+                        <div class="flex gap-10 items-center">
+                            {% for announcement in announcements %}
+                            <div class="flex items-center gap-2 ">
+                                <span class="h-2 w-2 bg-green-400 rounded-full"></span>
+                                <p class="text-2xl"> {{announcement.content}} </p>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                    </marquee>
+                </div>
+            
+            {% endif %}
+            
+
+            {% comment %} Main {% endcomment %}
+            <div class="w-full p-5 text-primary-500">
+                <div>
+                
+                    {% if screen == "dashboard" %}
+        
+                        {% include 'main/users/dashboard.html' %}
+        
+                    {% elif screen == "members" %}
+                            
+                        {% include 'main/users/members.html' %}
+        
+                    {% elif screen == "profile" %}
+        
+                        {% include "main/users/profile.html" %}
+        
+                    {% elif screen == "add-member" %}
+        
+                        {% include "main/users/add_member.html"%}
+                        
+                    {% elif screen == "departments" %}
+                        
+                        {% include "main/users/departments.html" %}
+                    
+                    {% elif screen == "donations" %}
+                        
+                        {% include "main/users/donations.html" %}
+        
+                    {% elif screen == "prayers" %}
+                        
+                        {% include "main/users/prayers.html" %}
+
+                    {% elif screen == "events" %}
+                        
+                        {% include "main/users/events.html" %}
+                    
+                    {% elif screen == "posts" %}
+                        
+                        {% include "main/users/posts.html" %}
+
+                    {% elif screen == "announcements" %}
+                        
+                        {% include "main/users/announcements.html" %}
+                    
+                    {% endif %}
+
+                </div>
+                
+            </div>
+
+        </div>
+
+        {% comment %} Live Stream {% endcomment %}
+        <div class="h-15 w-15 text-white group rounded-full bg-primary-300 flex justify-center items-center absolute animate-bounce hover:animate-none cursor-pointer transition right-10 bottom-20 sm:bottom-10">
+            <i class="text-2xl fa fa-play"></i>
+
+            <div class="absolute hidden bottom-[90%] text-center text-primary-500 group-hover:block active:block right-[90%] shadow-md rounded-2xl bg-white  w-40 border border-gray-200 p-3 h-20 " style="border-bottom-right-radius: 0px;">
+                <h6 class="text-xs font-bold">We are now live</h6>
+                <h5 class="font-semibold text-sm uppercase mt-2">Click to stream</h5>
+            </div>
+        </div>
+            
+    </div> 
+
+</div>
+
+
+
+{% endblock content %}

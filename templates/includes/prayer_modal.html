@@ -1,0 +1,26 @@
+
+
+{% if prayer %}
+    <div>
+        
+        <div class="fixed w-full h-full top-0 left-0 z-20">
+            <a href="{% url back  %}" class="w-full h-full absolute top-0 left-0 bg-black/60"></a>
+
+            <div class="flex justify-center items-center w-full h-full">
+        
+                <div class="p-5 bg-white shadow-lg relative rounded-xl w-full max-w-xl min-h-40">
+                     {{prayer.content}}
+
+                    
+                    <a href="{% url back  %}" class="btn bg-primary-300 mt-10 block ml-auto">Close</a>
+                </div>
+        
+            </div>
+        
+        
+        
+        </div>
+
+    </div>
+
+{% endif %}

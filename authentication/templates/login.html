@@ -1,0 +1,52 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+
+{% include "includes/header.html" %}
+
+<div class="md:flex fixed top-0 w-full">
+
+    <div  class="w-full register_bg h-screen md:flex hidden  justify-center items-center relative">
+        <div class="overlay">
+            <div class="w-24 h-24 rounded-full overflow-hidden mx-auto mb-5">
+                <img src="{{church.logo_url}}" alt="">
+            </div>
+            <span class="mt-8 font-medium text-white text-5xl">{{church.name}}</span>
+
+        </div>
+
+
+    </div>
+    
+        <div class="flex justify-center items-center w-full pt-25 overflow-y-auto h-screen">
+            <div class="w-[90%] max-w-[40rem]">
+                <div class="text-center mb-10">
+                  
+                    <div>
+                        <h1 class="text-4xl font-medium">Welcome back</h1>
+                        <p class="mt-4">Login with your ID and password</p>
+
+                    </div>
+                   
+                </div>
+
+                <form method="post" enctype="multipart/form-data" class="pb-10">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mt-4">
+                        <div for="">{{field.label | upper}}</div>
+                        {{field}}
+                        <small class="text-red-400">{{field.errors}}</small>
+                    </div>
+                    {% endfor %} 
+                        {% include "includes/feedback.html" %}                     
+                    <button type="submit" class="p-4 mt-10 text-center bg-primary-400 text-white  hover:bg-primary-500 transition cursor-pointer w-[15rem] rounded">Login</button>
+
+                </form>
+            </div>
+        </div>
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,70 @@
+
+
+
+<div class="bg-white p-10 rounded-2xl shadow">
+    {% if type == "view" %}
+
+        <div>
+            <a href="{% url "events" 'add' %}" class="btn  inline-block">
+                <div class=" flex items-center gap-2">
+                    <span>New Event</span>
+                    <i class="fa fa-plus"></i>
+                </div>
+            </a>
+
+
+
+            <div class="overflow-x-auto text-nowrap">
+                <table class="table-auto w-full mt-10">
+                    <thead>
+                        <tr class='text-left border-b border-zinc-200'>
+                            <th class="p-4">SN</th>
+                            <th class="p-4">Theme</th>
+                            <th class="p-4">Caption</th>
+                            <th class="p-4">Minister</th>
+                            <th class="p-4">Venue</th>
+                            <th class="p-4">Action</th>
+                        </tr>
+                    </thead>
+            
+                    <tbody>
+                        {% for event in events %}
+                            <tr class="border-b border-zinc-200">
+                                <td class="p-4">{{forloop.counter}}</td>
+                                <td class="p-4"> {{ event.theme | truncatechars:40 }}</td>
+                                <td class="p-4"> {{ event.caption | truncatechars:40 }} </td>
+                                <td class="p-4"> {{ event.minister }}  </td>
+                                <td class="p-4"> {{ event.venue | truncatechars:40 }} </td>
+                                <td class="p-4">
+                                    <div class="flex items-center gap-5">
+                                        <a href="{% url "events" 'edit' %}?id={{event.id}}" class="text-yellow-400">Edit <i class="fa fa-edit"></i></a>
+                                        <a href="{% url "events" 'delete' %}?id={{event.id}}" class="text-red-400">Delete <i class="fa fa-trash"></i></a>
+                                    </div>
+                                </td>
+                                
+                            </tr>
+                        
+                        {% empty %}
+                        <tr ><td colspan="4" class="p-4">No event yet!</td></tr>
+                        
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    {% else  %}
+
+        <div class="container">
+            <a href="{% url "events" 'view' %}" class="bg-zinc-400 px-4 py-3 rounded  inline-block font-medium cursor-pointer text-white mb-10" >
+                <span>Back</span>
+            </a>
+
+            {% include "includes/form.html" with button_text=button_text %}
+
+        </div>
+
+    {% endif %}
+
+</div>

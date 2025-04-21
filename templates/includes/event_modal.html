@@ -1,0 +1,43 @@
+
+
+{% if event %}
+    <div>
+        
+        <div class="fixed w-full h-full top-0 left-0 z-20">
+            {% if screen  == 'events'%}
+                <a href="{% url back 'view' %}" class="w-full h-full absolute top-0 left-0 bg-black/60"></a>
+                {% else %}
+                <a href="{% url back  %}" class="w-full h-full absolute top-0 left-0 bg-black/60"></a>
+                
+            {% endif %}
+        
+            <div class="flex justify-center items-center w-full h-full">
+        
+                <div class="p-5 bg-white shadow-lg relative rounded-xl w-full max-w-xl">
+                    <h1 class="text-2xl font-medium"> <span class="font-bold">Theme:</span> {{event.theme}}</h1>
+                    <p class="mb-3"> {{event.caption}}</p>
+                    <p class="mb-3 italic"> <span class="font-bold">Venue:</span> {{event.venue}}</p>
+                    <p class="mb-3"> <span class="font-bold">Mininstring:</span> {{event.minister}}</p>
+                    <p class="mb-3"> <span class="font-bold">Start Date:</span> {{event.start_at}}</p>
+                    {% if event.end_at %}
+                        <p class="mb-3"> <span class="font-bold">End Date</span> {{event.end_at}}</p>
+                    {% endif %}
+                    
+
+                    {% if screen  == 'events'%}
+                        <a href="{% url back 'view' %}" class="btn bg-primary-300 mt-10 block ml-auto">Close</a>
+                    {% else %}
+                        <a href="{% url back  %}" class="btn bg-primary-300 mt-10 block ml-auto">Close</a>
+                    
+                    {% endif %}
+                </div>
+        
+            </div>
+        
+        
+        
+        </div>
+
+    </div>
+
+{% endif %}

@@ -1,0 +1,32 @@
+
+
+
+
+<header class="{% if page == "landing" %}  {% else %} bg-primary-400{% endif %} p-4 fixed w-full z-10">
+
+    <div class="flex justify-between items-end mx-auto">
+
+        <a href="{% url "landing" %}" class="logo flex gap-3 items-end">
+            <i class="fa fa-bible text-4xl text-white"></i>
+            <span class="text-3xl/5 font-bold text-white">CHURCH ID</span>
+        </a>
+
+
+        {% if user.is_authenticated %}
+            <nav class="flex gap-4 text-white px-4">
+                <a href="{% url "dashboard" %}" class="font-bold text-lg  border-b border-b-transparent hover:border-b-white">Dashboard</a>
+                <a href="{% url "logout" %}" class="font-bold text-lg  border-b border-b-transparent hover:border-b-white">Logout</a>
+            </nav>
+
+        
+        {% else %}
+            <nav class="flex gap-4 text-white" >
+                <a href="{% url "register" 'email-verification' %}"  class="font-bold text-lg  border-b border-b-transparent hover:border-b-white">Register</a>
+                <a href="{% url "login" %}"  class="font-bold text-lg  border-b border-b-transparent hover:border-b-white">Login</a>
+            </nav>
+        {% endif %}
+        
+    
+    </div>
+
+</header>
